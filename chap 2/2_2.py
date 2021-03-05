@@ -24,7 +24,7 @@ class bandit():
         self.mean = 0.0
         self.cnt = 0
 
-    def get_UCB_score(self, t):
+    def get_UCB_score(self, t, c):
         if self.cnt == 0:
             sq = 10000
         else:
@@ -61,7 +61,7 @@ def get_result_UCB(c):
         # if (np.random.random()<e):
         #     choose = np.random.choice(CFG.n)
         # else:
-        choose = np.argmax([ban.get_UCB_score(t) for ban in bandits])
+        choose = np.argmax([ban.get_UCB_score(t, c) for ban in bandits])
         
         val = bandits[choose].get_reward()
         res.append(val)

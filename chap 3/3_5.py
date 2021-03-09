@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from tqdm import trange
 
 N, M = 10,10
-n_try = 1000
+n_try = 3000
 ans = np.zeros((N, M))
 
 for _ in trange(n_try):

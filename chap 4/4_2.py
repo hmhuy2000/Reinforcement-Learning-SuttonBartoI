@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from tqdm import trange
 import pandas as pd
 
-N, M = 4, 4
+N, M = 4,4
 n_try = 1
 ans = np.zeros((N, M))
 
@@ -29,12 +29,12 @@ for _ in trange(n_try):
         for j in range(M):
             tmp = []
             reward = -1
-            for stt in range(len(dirX)):
+            if ((i,j) == (0,0) or (i,j) == (N-1, M-1)):
+                reward = 0
+                act[(i,j)] = [((i,j), reward)]
+                continue
 
-                if ((i,j) == (0,0) or (i,j) == (N-1, M-1)):
-                    reward = 0
-                    tmp.append(((i,j), reward))
-                    continue
+            for stt in range(len(dirX)):
 
                 newX = i + dirX[stt]
                 newY = j + dirY[stt]

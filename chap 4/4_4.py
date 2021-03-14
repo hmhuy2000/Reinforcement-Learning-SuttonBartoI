@@ -37,8 +37,8 @@ def get_value_state(state, action, policy, value, constant = True):
     car_1 -= action
     car_2 += action
 
-    for request_1 in range(11):
-        for request_2 in range(11):
+    for request_1 in range(CFG.max_car + 1):
+        for request_2 in range(CFG.max_car + 1):
             prob_request = poisson_prob(request_1, CFG.expect_request_1) * poisson_prob(request_2, CFG.expect_request_2)
             valid_request_1 = min(car_1, request_1)
             valid_request_2 = min(car_2, request_2)
@@ -87,6 +87,7 @@ def get_optimal_value_map(policy, value):
 step = 0
 while(True):
     step += 1
+    print(f'Start value estimate for step {step}')
     value = get_optimal_value_map(policy, value)
     print(f'Done value estimate for step {step}')
     done = True

@@ -13,7 +13,7 @@ class CFG:
     WIN = 1
     DRAW = 0
     LOSE = -1
-    n_run = 300
+    n_run = 100
     n_episode = 10000
     target_value = -0.27726
 

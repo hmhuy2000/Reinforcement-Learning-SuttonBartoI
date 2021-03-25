@@ -13,7 +13,7 @@ class CFG:
     action_end = 1
     actions = [action_back, action_end]
     n_run = 10
-    n_episode = 50000000
+    n_episode = 1000000
 
 # ========================= define policy ============================
 
@@ -66,8 +66,9 @@ def MonteCarlo_ordinary_sampling(n_episode, n_r):
 for r in range(CFG.n_run):
     ordinary = MonteCarlo_ordinary_sampling(CFG.n_episode, r)
     plt.plot(ordinary, label = f'{r}')
-    plt.xscale('log')
-    plt.xlabel('episode')
-    plt.ylabel('state value')
-    plt.savefig(f'figure_5_8_{r}.png')
-    plt.close()
+plt.xscale('log')
+plt.xlabel('episode')
+plt.ylabel('state value')
+plt.legend()
+plt.savefig(f'figure_5_8/figure_5_8.png')
+plt.close()

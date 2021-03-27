@@ -10,11 +10,11 @@ import random
 
 class CFG:
 
-    episode = 100
+    episode = 500
     MC_alpha = [0.01, 0.02, 0.03, 0.04]
     TD_alpha = [0.05, 0.1, 0.15]
     target = [1/6, 2/6, 3/6, 4/6, 5/6]
-    run = 100
+    run = 500
     garma = 1.0
 
 # ======================== init ======================================
@@ -25,11 +25,10 @@ class game():
         self.policy = np.full((7,2), 0.5)
         self.Left = -1
         self.Right = 1
+        self.Stop = 0
         self.actions = [self.Left, self.Right]
-        self.FristEnd = 0
+        self.FirstEnd = 0
         self.LastEnd = 6
-        self.value_function[self.FristEnd] = 0
-        self.value_function[self.LastEnd] = 1
         self.alpha = alpha
         self.TypeAlgo = TypeAlgo
 
@@ -47,16 +46,17 @@ class game():
         cur = 3
         reward = 0
 
-        while(cur != self.FristEnd and cur != self.LastEnd):
+        while(cur != self.FirstEnd and cur != self.LastEnd):
             action = np.random.choice(self.actions, p=self.policy[cur, :])
-            # if (cur + action == self.LastEnd):
-            #     state_reward = 1
-            # else:
-            #     state_reward = 0
             state_reward = 0
             his.append((cur, action, state_reward))
             cur += action
             reward += state_reward
+        if cur == self.LastEnd:
+            state_reward = 1
+        else:
+            state_reward = 0
+        his.append((cur, self.Stop, state_reward))
 
         return his, reward
 
@@ -65,7 +65,7 @@ class game():
         cur = 3
         reward = 0
 
-        while(cur != self.FristEnd and cur != self.LastEnd):
+        while(cur != self.FirstEnd and cur != self.LastEnd):
             action = np.random.choice(self.actions, p=self.policy[cur, :])
             if (cur + action == self.LastEnd):
                 state_reward = 1
@@ -84,7 +84,7 @@ class game():
             return self.update_TD(state, state + action, state_reward)
 
     def update_TD(self, state, Nstate, state_reward):
-        up = self.alpha * (state_reward + CFG.garma * self.value_function[Nstate] - self.value_function[state])
+        up = self.alpha * (state_reward + CFG.garma * self.value_function[Nstate] * int(state != Nstate) - self.value_function[state])
         self.value_function[state] += up
         return up
     
@@ -130,7 +130,7 @@ def TD_evaluate(episode, alpha, TDplot = False):
             env.value_function += update
             error.append(np.sqrt(np.sum(np.power(env.get_value_function()[1:-1] - CFG.target, 2))/5.0))
             if (r == 1 and TDplot):
-                if (ep == 0 or ep == 1 or ep == 10 or ep == 99):
+                if (ep == 0 or ep == 1 or ep == 10 or ep == 100 or ep == 200 or ep == 299):
                     plt.plot(env.get_value_function()[1:-1], label = f'{ep}')
         error = np.asarray(error)
         total_error += error
@@ -140,6 +140,7 @@ def TD_evaluate(episode, alpha, TDplot = False):
             plt.legend()
             plt.savefig('figure_6_6/6_6.png')
             plt.close()
+            return
     
     return total_error/CFG.run
 
